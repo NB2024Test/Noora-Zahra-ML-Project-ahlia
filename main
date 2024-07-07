@@ -1,0 +1,72 @@
+import streamlit as st
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error
+st.title("Linear Regression on Math Scores")
+uploaded_file = st.file_uploader("Choose a file", type=['csv'])
+if uploaded_file is not None:
+    student = pd.read_csv(uploaded_file)
+    # Rest of the code
+    # Checking the head of the data (First 5 rows)
+st.subheader("Data Head")
+st.write(student.head())
+
+# Show null counts and data types
+st.subheader("Data Info")
+buffer = io.StringIO()
+student.info(buf=buffer)
+st.text(buffer.getvalue())
+
+# Describing some of the stats of the data
+st.subheader("Data Description")
+st.write(student.describe())
+
+# Boxplot of math score grouped by gender
+st.subheader("Math Score by Gender")
+fig, ax = plt.subplots()
+sns.boxplot(x="gender", y="math score", data=student, ax=ax)
+st.pyplot(fig)
+
+# Scatterplot of reading score vs writing score
+st.subheader("Reading vs Writing Scores")
+fig, ax = plt.subplots()
+sns.scatterplot(x="writing score", y="math score", data=student, ax=ax)
+st.pyplot(fig)
+
+# Histogram of lunch
+st.subheader("Lunch Histogram")
+fig, ax = plt.subplots()
+sns.histplot(student['lunch'], ax=ax)
+st.pyplot(fig)
+
+# Correlation Matrix
+st.subheader("Correlation Matrix")
+corr_matrix = student.corr()
+fig, ax = plt.subplots(figsize=(10, 8))
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', ax=ax)
+st.pyplot(fig)
+
+# Linear Regression Evaluation
+st.subheader("Linear Regression Evaluation")
+st.write(f"R^2 score: {model.score(X_test, y_test)}")
+st.write(f"Mean Squared Error: {mean_er}")
+st.write(f"R Square: {r2}")
+st.write(f"Coefficients: {model.coef_}")
+st.write(f"Intercept: {model.intercept_}")
+
+# Actual vs Predicted Scatter Plot
+st.subheader("Actual vs Predicted Scatter Plot")
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.scatter(y_test, y_pred, color='blue', label='Predicted')
+ax.scatter(y_test, y_test, color='orange', label='Actual')
+ax.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label='Ideal 1:1 line')
+ax.set_xlabel("Actual Math Score")
+ax.set_ylabel("Predicted Math Score")
+ax.set_title("Actual vs Predicted Math Scores")
+ax.legend()
+st.pyplot(fig)
